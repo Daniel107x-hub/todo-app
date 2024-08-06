@@ -1,0 +1,53 @@
+.todoPage {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.newTodo {
+    margin-bottom: 1rem;
+}
+
+.newTodoCard{
+    width: 50vw;
+
+    .input {
+        width: 100%;
+
+        .details {
+            display: flex;
+            flex-direction: column;
+
+            textarea {
+                width: 100%;
+                min-height: 5rem;
+                max-height: 8rem;
+            }
+
+            > * {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+            }
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+}
+
+.todos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+    grid-auto-rows: minmax(10rem, auto);
+}
+
+.todo {
+    :hover {
+        cursor: pointer;
+        background-color: beige;
+    }
+}

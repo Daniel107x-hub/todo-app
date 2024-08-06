@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import TodoPage from "./pages/TodoPage";
+import TodoPage from "./pages/Todo/TodoPage";
 import Header from "./components/Header/Header";
 
 function App() {
