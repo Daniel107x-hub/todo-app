@@ -36,3 +36,65 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
+
+## Creating the controllers
+1. Create a controller
+```csharp
+using backend.Data;
+using backend.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TodoController : ControllerBase
+{
+    private readonly TodoDbContext _context;
+    
+    public TodoController(TodoDbContext context)
+    {
+        _context = context;
+    }
+    
+    [HttpGet("/")]
+    public async Task<IEnumerable<Todo>> GetTodos()
+    {
+        return await _context.Todos.ToListAsync();
+    }
+}
+
+```
+2. Add the swagger config and map the controllers in Program.cs
+```csharp
+using backend.Data;
+using Microsoft.OpenApi.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<TodoDbContext>();
+builder.Services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo()
+{
+    Title = "Todo",
+    Description = "An API for managing todos",
+    Version = "1.0"
+}));
+
+var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseHttpsRedirection();
+}
+
+
+app.Run();
+```
