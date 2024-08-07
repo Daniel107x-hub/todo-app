@@ -1,9 +1,9 @@
 import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { Todo } from '../../types/Todo';
 import {useDispatch, useSelector} from "react-redux";
-import {addTodo} from "../../redux/Todo/TodoSlice";
+import {addTodo, useGetTodosQuery} from "../../redux/Todo/TodoSlice";
 
 type NewTodo = {
     title: string;
@@ -11,7 +11,7 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const data: Todo[] = useSelector((state: any) => state.todo.todos);
+    const todos: Todo[] = useSelector((state: any) => state.todo.todos);
     const dispatch = useDispatch();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
@@ -50,7 +50,7 @@ const TodoPage = () => {
     const handleAddTodo = () => {
         // TODO: Show success message
         const todo: Todo = {
-            id: data.length + 1,
+            id: todos.length + 1,
             completed: false,
             ...newTodo
         };
@@ -58,6 +58,8 @@ const TodoPage = () => {
         handleClearTodo();
     }
 
+    const { data, error, isLoading } = useGetTodosQuery();
+    if(isLoading || !data) return <>Loading...</>
     return (
         <div className={styles.todoPage}>
             <section className={styles.newTodo}>
