@@ -1,14 +1,9 @@
 import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
-import { TODOS } from "./Todo.data";
 import {useState} from "react";
-
-type Todo = {
-    id: number;
-    title: string;
-    description: string;
-    completed: boolean;
-};
+import { Todo } from '../../types/Todo';
+import {useDispatch, useSelector} from "react-redux";
+import {addTodo} from "../../redux/Todo/TodoSlice";
 
 type NewTodo = {
     title: string;
@@ -16,7 +11,8 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const [data, setData] = useState<Todo[]>(TODOS);
+    const data: Todo[] = useSelector((state: any) => state.todo.todos);
+    const dispatch = useDispatch();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
@@ -52,20 +48,13 @@ const TodoPage = () => {
     };
 
     const handleAddTodo = () => {
-        // Add new todo to data
-        // Clear new todo form
-        // Show success message
-        setData((todos: Todo[]) => {
-            return [
-                ...todos,
-                {
-                    id: todos.length + 1,
-                    title: newTodo.title,
-                    description: newTodo.description,
-                    completed: false
-                }
-            ]
-        });
+        // TODO: Show success message
+        const todo: Todo = {
+            id: data.length + 1,
+            completed: false,
+            ...newTodo
+        };
+        dispatch(addTodo(todo));
         handleClearTodo();
     }
 
