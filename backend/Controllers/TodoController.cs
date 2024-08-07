@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
+[ApiController]
 public class TodoController : ControllerBase
 {
     private readonly TodoDbContext _context;
@@ -16,7 +16,7 @@ public class TodoController : ControllerBase
         _context = context;
     }
     
-    [HttpGet("/")]
+    [HttpGet]
     public async Task<IEnumerable<Todo>> GetTodos()
     {
         return await _context.Todos.ToListAsync();
