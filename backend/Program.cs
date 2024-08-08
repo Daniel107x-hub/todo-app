@@ -12,6 +12,22 @@ builder.Services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiIn
     Description = "An API for managing todos",
     Version = "1.0"
 }));
+// Add CORS for testing
+var specificOrigins = "AppOrigins";
+if(builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options => {
+        options.AddPolicy(name: specificOrigins,
+            policy => {
+                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            }
+        );
+    });
+}
+
 // builder.Services.AddRouting(option => option.LowercaseUrls = true);
 
 var app = builder.Build();
@@ -21,7 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
-    app.UseCors();
+    app.UseCors(specificOrigins);
 }
 else
 {
