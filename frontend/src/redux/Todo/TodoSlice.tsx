@@ -2,15 +2,20 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Todo } from '../../types/Todo'
 import {TODOS} from "../../pages/Todo/Todo.data";
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import { error } from "console";
 
 export type TodoState = {
+    loading: boolean;
     todos: Todo[];
+    error: string | null;
 };
 
 export const todoSlice = createSlice({
     name: 'todo',
     initialState: {
-        todos: TODOS
+        loading: false,
+        todos: TODOS,
+        error: null
     },
     reducers: {
         addTodo: (state: TodoState, action: PayloadAction<Todo>) => {
@@ -31,9 +36,30 @@ export const todoApi = createApi({
         getTodos: builder.query<Todo[], void>({
             query: () => ''
         }),
+        createTodo: builder.mutation<Todo, Todo>({
+            query: ({...body}) => ({
+                url: '',
+                method: 'POST',
+                body: body
+            }),
+            // The following code is used to update the cache when a new todo is created
+            // or undo the changes if the request fails
+            async onQueryStarted(todo, {dispatch, queryFulfilled}) {
+                const patchResult = dispatch(
+                    todoApi.util.updateQueryData('getTodos', undefined, (draft) => {
+                        draft?.push(todo);
+                    })
+                );
+                try{
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            }
+        })
     }),
 });
 
 export const { addTodo, removeTodo } = todoSlice.actions;
-export const { useGetTodosQuery } = todoApi;
+export const { useGetTodosQuery, useCreateTodoMutation } = todoApi;
 export default todoSlice.reducer;

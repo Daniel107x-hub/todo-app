@@ -3,7 +3,7 @@ import styles from "./TodoPage.module.css";
 import {useEffect, useState} from "react";
 import { Todo } from '../../types/Todo';
 import {useDispatch, useSelector} from "react-redux";
-import {addTodo, useGetTodosQuery} from "../../redux/Todo/TodoSlice";
+import {addTodo, useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoSlice";
 
 type NewTodo = {
     title: string;
@@ -11,8 +11,7 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const todos: Todo[] = useSelector((state: any) => state.todo.todos);
-    const dispatch = useDispatch();
+    const [createTodo, result] = useCreateTodoMutation();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
@@ -50,11 +49,11 @@ const TodoPage = () => {
     const handleAddTodo = () => {
         // TODO: Show success message
         const todo: Todo = {
-            id: todos.length + 1,
+            id: 0,
             completed: false,
             ...newTodo
         };
-        dispatch(addTodo(todo));
+        createTodo(todo);
         handleClearTodo();
     }
 
