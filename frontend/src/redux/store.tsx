@@ -1,13 +1,15 @@
 import {combineReducers, configureStore, Store} from "@reduxjs/toolkit";
 import todoReducer, {todoApi, TodoState} from "./Todo/TodoSlice";
-import { authApi } from "./Auth/AuthSlice";
+import authReducer, { authApi, AuthState } from "./Auth/AuthSlice";
 
 interface AppState {
-    todo: TodoState
+    todo: TodoState,
+    auth: AuthState
 }
 
 const rootReducer = combineReducers({
     todo: todoReducer,
+    auth: authReducer,
     [todoApi.reducerPath]: todoApi.reducer,
     [authApi.reducerPath]: authApi.reducer
 });

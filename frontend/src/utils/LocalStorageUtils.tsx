@@ -6,3 +6,7 @@ export const getTokenFromLocalStorage = () : string => {
 export const setTokenInLocalStorage = (token: string) => {
     localStorage.setItem('jwt', token);
 }
+
+export const removeTokenFromLocalStorage = () => {
+    localStorage.removeItem('jwt');
+}

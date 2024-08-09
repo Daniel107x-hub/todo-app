@@ -8,6 +8,7 @@ namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TodoController : ControllerBase
 {
     private readonly TodoDbContext _context;
@@ -18,7 +19,6 @@ public class TodoController : ControllerBase
     }
     
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<Todo>>> GetTodos()
     {
         return await _context.Todos.ToListAsync();
