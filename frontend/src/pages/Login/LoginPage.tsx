@@ -1,8 +1,8 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { useLoginMutation, login } from "../../redux/Auth/AuthSlice";
-import { setTokenInLocalStorage } from "../../utils/LocalStorageUtils";
+import { useLoginMutation } from "../../redux/Auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { setTokenInLocalStorage } from "../../utils/LocalStorageUtils";
 
 export type AuthResponse = {
     credential: string;
@@ -22,7 +22,7 @@ const LoginPage = () => {
         const data = (await executeLogin(response.credential)).data;
         const token = data?.token; 
         if(!token) return;
-        dispatch(login({token}));
+        setTokenInLocalStorage(token);
         navigate("/");
     };
 

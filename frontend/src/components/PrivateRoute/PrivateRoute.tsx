@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
-import { checkAuth } from "../../redux/Auth/AuthSlice";
-import { Navigate, Outlet, redirect, Route } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { getTokenFromLocalStorage } from "../../utils/LocalStorageUtils";
 
 
 const PrivateRoute = () => {
-    const isAuthenticated = useSelector(checkAuth);
+    const isAuthenticated = !!getTokenFromLocalStorage();
     if(!isAuthenticated) return <Navigate to={'/login'}/>;
     return <Outlet/>
 };

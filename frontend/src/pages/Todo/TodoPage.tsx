@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Todo } from '../../types/Todo';
 import { useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoSlice";
 import { useDispatch } from "react-redux";
-import { logout } from "../../redux/Auth/AuthSlice";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type NewTodo = {
     title: string;
@@ -13,8 +12,6 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [createTodo, result] = useCreateTodoMutation();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
@@ -62,11 +59,6 @@ const TodoPage = () => {
     }
 
     const { data, error, isLoading } = useGetTodosQuery();
-    if(error && 'status' in error && error.status === 401) {
-        dispatch(logout());
-        navigate("/login");
-    }
-
     if(isLoading || !data) return <>Loading...</>
     return (
         <div className={styles.todoPage}>

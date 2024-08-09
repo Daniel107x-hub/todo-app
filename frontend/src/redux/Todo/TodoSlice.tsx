@@ -1,8 +1,9 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Todo } from '../../types/Todo'
 import {TODOS} from "../../pages/Todo/Todo.data";
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {createApi } from "@reduxjs/toolkit/query/react";
 import { getTokenFromLocalStorage } from "../../utils/LocalStorageUtils";
+import axiosBaseQuery from "../../client/customBaseQuery";
 
 export type TodoState = {
     loading: boolean;
@@ -29,13 +30,11 @@ export const todoSlice = createSlice({
 
 export const todoApi = createApi({
     reducerPath: 'todoApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:5299/api/todo'
-    }),
+    baseQuery: axiosBaseQuery(),
     endpoints: (builder) => ({
         getTodos: builder.query<Todo[], void>({
             query: () => ({
-                url: '',
+                url: 'todo',
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${getTokenFromLocalStorage()}`
@@ -44,9 +43,12 @@ export const todoApi = createApi({
         }),
         createTodo: builder.mutation<Todo, Todo>({
             query: ({...body}) => ({
-                url: '',
+                url: 'todo',
                 method: 'POST',
-                body: body
+                data: body,
+                headers: {
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`
+                }
             }),
             // The following code is used to update the cache when a new todo is created
             // or undo the changes if the request fails
