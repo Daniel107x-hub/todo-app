@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class TodoController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<Todo>>> GetTodos()
     {
         return await _context.Todos.ToListAsync();

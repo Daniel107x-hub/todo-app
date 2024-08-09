@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Todo } from '../../types/Todo'
 import {TODOS} from "../../pages/Todo/Todo.data";
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import { error } from "console";
+import { getTokenFromLocalStorage } from "../../utils/LocalStorageUtils";
 
 export type TodoState = {
     loading: boolean;
@@ -34,7 +34,13 @@ export const todoApi = createApi({
     }),
     endpoints: (builder) => ({
         getTodos: builder.query<Todo[], void>({
-            query: () => ''
+            query: () => ({
+                url: '',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`
+                }
+            })
         }),
         createTodo: builder.mutation<Todo, Todo>({
             query: ({...body}) => ({
