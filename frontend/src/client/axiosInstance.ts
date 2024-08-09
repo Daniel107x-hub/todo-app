@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 import { removeTokenFromLocalStorage } from "../utils/LocalStorageUtils";
 
 const axiosInstance = axios.create({
@@ -11,7 +10,7 @@ axiosInstance.interceptors.response.use(
     error => {
         if(error.response && error.response.status === 401) {
             removeTokenFromLocalStorage();
-            return redirect('/login');
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

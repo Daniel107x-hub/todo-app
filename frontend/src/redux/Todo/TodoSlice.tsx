@@ -31,6 +31,7 @@ export const todoSlice = createSlice({
 export const todoApi = createApi({
     reducerPath: 'todoApi',
     baseQuery: axiosBaseQuery(),
+    tagTypes: ['Todo'],
     endpoints: (builder) => ({
         getTodos: builder.query<Todo[], void>({
             query: () => ({
@@ -39,7 +40,15 @@ export const todoApi = createApi({
                 headers: {
                     Authorization: `Bearer ${getTokenFromLocalStorage()}`
                 }
-            })
+            }),
+            providesTags: (result) => result
+                ? // Successfully fetched data
+                [
+                    ...result.map(({id}) => ({type: 'Todo', id} as const)),
+                    { type: 'Todo', id: 'LIST' }
+                ]
+                :
+                [{type: 'Todo', id: 'LIST'}]
         }),
         createTodo: builder.mutation<Todo, Todo>({
             query: ({...body}) => ({
@@ -50,6 +59,7 @@ export const todoApi = createApi({
                     Authorization: `Bearer ${getTokenFromLocalStorage()}`
                 }
             }),
+            invalidatesTags: [{type: 'Todo', id: 'LIST'}],
             // The following code is used to update the cache when a new todo is created
             // or undo the changes if the request fails
             async onQueryStarted(todo, {dispatch, queryFulfilled}) {
