@@ -1,8 +1,10 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
+import {useState} from "react";
 
 type HeaderLink = {
     title: string;
     url: string;
+    isPrivate?: boolean;
 };
 
 type HeaderProps = {
@@ -11,6 +13,7 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
+    const [userData, setUserData] = useState(null);
     const { brand, links } = props;
     return (
         <Navbar className="bg-body-tertiary">
@@ -20,7 +23,10 @@ const Header = (props: HeaderProps) => {
                 }
                 <Nav>
                     {
-                        links.map((link) => <Nav.Link key={link.url} href={link.url}>{link.title}</Nav.Link>)
+                        links.map((link) => {
+                            if(!link.isPrivate || userData) return <Nav.Link key={link.url} href={link.url}>{link.title}</Nav.Link>
+                            return <></>
+                        })
                     }
                 </Nav>
             </Container>

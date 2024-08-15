@@ -22,7 +22,8 @@ function App() {
                     links={[
                         {
                             title: "Home",
-                            url: "/"
+                            url: "/",
+                            isPrivate: true
                         }
                     ]}
                 />
