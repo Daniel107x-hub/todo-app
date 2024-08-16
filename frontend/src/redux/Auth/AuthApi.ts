@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../../client/customBaseQuery";
+import {GOOGLE_AUTH_PATH} from "../../constants/constants";
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -7,7 +8,7 @@ export const authApi = createApi({
     endpoints: (builder) => ({
         login: builder.mutation<{token: string | undefined}, string>({
             query: (token) => ({
-                url: 'auth/google',
+                url: GOOGLE_AUTH_PATH,
                 method: 'POST',
                 data: JSON.stringify({token}),
                 headers: {
