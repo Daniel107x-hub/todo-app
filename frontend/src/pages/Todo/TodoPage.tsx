@@ -2,9 +2,7 @@ import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
 import { useState } from "react";
 import { Todo } from '../../types/Todo';
-import { useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoSlice";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
 
 type NewTodo = {
     title: string;

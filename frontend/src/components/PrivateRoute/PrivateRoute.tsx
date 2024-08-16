@@ -1,10 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { getTokenFromLocalStorage } from "../../utils/LocalStorageUtils";
+import {useSelector} from "react-redux";
+import {removeTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
 
 
 const PrivateRoute = () => {
-    const isAuthenticated = !!getTokenFromLocalStorage();
-    if(!isAuthenticated) return <Navigate to={'/login'}/>;
+    const user = useSelector((state: any) => {
+        return state.auth.user
+    });
+    if(!user){
+        removeTokenFromLocalStorage(); // Ban token in the backend
+        return <Navigate to={'/login'}/>;
+    }
     return <Outlet/>
 };
 

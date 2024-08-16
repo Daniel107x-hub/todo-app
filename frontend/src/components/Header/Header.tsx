@@ -1,8 +1,14 @@
-import {Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Nav, Navbar} from "react-bootstrap";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {removeTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
+import {removeUser} from "../../redux/Auth/AuthSlice";
+import {useNavigate} from "react-router-dom";
 
 type HeaderLink = {
     title: string;
     url: string;
+    isPrivate?: boolean;
 };
 
 type HeaderProps = {
@@ -11,7 +17,15 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
+    const user = useSelector((state: any) => state.auth.user);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { brand, links } = props;
+    const handleLogout = () => {
+        removeTokenFromLocalStorage();
+        dispatch(removeUser())
+        navigate("/login");
+    };
     return (
         <Navbar className="bg-body-tertiary">
             <Container>
@@ -20,7 +34,13 @@ const Header = (props: HeaderProps) => {
                 }
                 <Nav>
                     {
-                        links.map((link) => <Nav.Link key={link.url} href={link.url}>{link.title}</Nav.Link>)
+                        links.map((link) => {
+                            if(!link.isPrivate || user) return <Nav.Link key={link.url} href={link.url}>{link.title}</Nav.Link>
+                            return <></>
+                        })
+                    }
+                    {
+                        user && <Button variant="danger" onClick={handleLogout}>Logout</Button>
                     }
                 </Nav>
             </Container>
