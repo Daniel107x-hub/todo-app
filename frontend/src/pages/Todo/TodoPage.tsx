@@ -10,7 +10,7 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const [createTodo, result] = useCreateTodoMutation();
+    const [createTodo] = useCreateTodoMutation();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
@@ -56,7 +56,7 @@ const TodoPage = () => {
         handleClearTodo();
     }
 
-    const { data, error, isLoading } = useGetTodosQuery();
+    const { data, isLoading } = useGetTodosQuery();
     if(isLoading || !data) return <>Loading...</>
     return (
         <div className={styles.todoPage}>

@@ -1,5 +1,4 @@
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {removeTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
 import {removeUser} from "../../redux/Auth/AuthSlice";

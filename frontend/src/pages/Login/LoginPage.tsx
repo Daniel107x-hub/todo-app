@@ -21,7 +21,7 @@ export type LoginResponse = {
 }
 
 const LoginPage = () => {
-    const [executeLogin, result] = useLoginMutation<AuthResponse>();
+    const [executeLogin] = useLoginMutation<AuthResponse>();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.auth.user);

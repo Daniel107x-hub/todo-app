@@ -1,9 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Todo } from '../../types/Todo'
 import {TODOS} from "../../pages/Todo/Todo.data";
-import {createApi } from "@reduxjs/toolkit/query/react";
-import { getTokenFromLocalStorage } from "../../utils/LocalStorageUtils";
-import axiosBaseQuery from "../../client/customBaseQuery";
 
 export type TodoState = {
     loading: boolean;
