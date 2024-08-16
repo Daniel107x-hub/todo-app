@@ -1,0 +1,41 @@
+.userBadge{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+    font-size: small;
+    justify-content: center;
+
+    .profile{
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #408fc4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .initials{
+            visibility: hidden;
+            font-size: 0;
+        }
+
+        .initials:first-letter{
+            visibility: visible;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .picture{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+}
+
+.userActions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

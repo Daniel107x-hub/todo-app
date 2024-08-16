@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {removeTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
 import {removeUser} from "../../redux/Auth/AuthSlice";
 import {useNavigate} from "react-router-dom";
+import UserBadge from "./UserBadge";
 
 type HeaderLink = {
     title: string;
@@ -38,10 +39,14 @@ const Header = (props: HeaderProps) => {
                             return <></>
                         })
                     }
-                    {
-                        user && <Button variant="danger" onClick={handleLogout}>Logout</Button>
-                    }
                 </Nav>
+                {
+                    user && <section>
+                        <UserBadge>
+                            <Button variant="danger" onClick={handleLogout}>Logout</Button>
+                        </UserBadge>
+                    </section>
+                }
             </Container>
         </Navbar>
     );
