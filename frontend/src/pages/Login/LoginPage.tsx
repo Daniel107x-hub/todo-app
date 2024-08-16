@@ -1,5 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
-import {setUser, useLoginMutation} from "../../redux/Auth/AuthSlice";
+import {setUser} from "../../redux/Auth/AuthSlice";
+import { useLoginMutation} from "../../redux/Auth/AuthApi";
 import {Navigate, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import { setTokenInLocalStorage } from "../../utils/LocalStorageUtils";

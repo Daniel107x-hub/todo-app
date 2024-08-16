@@ -1,6 +1,8 @@
 import {combineReducers, configureStore, Reducer, Store} from "@reduxjs/toolkit";
-import todoReducer, {todoApi, TodoState} from "./Todo/TodoSlice";
-import authReducer, {authApi, AuthState} from "./Auth/AuthSlice";
+import todoReducer, {TodoState} from "./Todo/TodoSlice";
+import authReducer, {AuthState} from "./Auth/AuthSlice";
+import {todoApi} from "./Todo/TodoApi";
+import {authApi} from "./Auth/AuthApi";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 interface AppState {
