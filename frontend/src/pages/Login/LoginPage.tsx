@@ -1,8 +1,10 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { useLoginMutation } from "../../redux/Auth/AuthSlice";
+import {setUser, useLoginMutation} from "../../redux/Auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setTokenInLocalStorage } from "../../utils/LocalStorageUtils";
+import {toast} from "react-toastify";
+import {User} from "../../types/Todo";
 
 export type AuthResponse = {
     credential: string;
@@ -12,6 +14,7 @@ export type AuthResponse = {
 
 export type LoginResponse = {
     token: string;
+    user: User
 }
 
 const LoginPage = () => {
@@ -19,10 +22,15 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const onSuccess = async (response:any) => {
-        const data = (await executeLogin(response.credential)).data;
-        const token = data?.token; 
-        if(!token) return;
+        const data = (await executeLogin(response.credential)).data as LoginResponse;
+        const token = data?.token;
+        const user = data?.user;
+        if(!token || !user){
+            toast.error("Login Failed");
+            return;
+        }
         setTokenInLocalStorage(token);
+        dispatch(setUser(user));
         navigate("/");
     };
 

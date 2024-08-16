@@ -4,3 +4,11 @@ export type Todo = {
     description: string;
     completed: boolean;
 };
+
+export type User = {
+    email: string;
+    firstName: string;
+    lastName: string;
+    picture: string;
+    dateOfBirth?: string;
+}
