@@ -8,6 +8,7 @@ import {toast} from "react-toastify";
 import {User} from "../../types/Todo";
 import {Card} from "react-bootstrap";
 import styles from "./LoginPage.module.css";
+import {ROOT_PATH} from "../../constants/constants";
 
 export type AuthResponse = {
     credential: string;
@@ -35,14 +36,14 @@ const LoginPage = () => {
         }
         setTokenInLocalStorage(token);
         dispatch(setUser(user));
-        navigate("/");
+        navigate(ROOT_PATH);
     };
 
     const onFailure = () => {
         console.log('Login Failed:');
     };
 
-    if(user) return <Navigate to={"/"}/>
+    if(user) return <Navigate to={ROOT_PATH}/>
 
     return (
     <div className={styles.content}>

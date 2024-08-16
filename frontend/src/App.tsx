@@ -8,6 +8,7 @@ import LoginPage from './pages/Login/LoginPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import {ToastContainer} from "react-toastify";
 import {PersistGate} from "redux-persist/integration/react";
+import {LOGIN_PATH, ROOT_PATH} from "./constants/constants";
 
 const CLIENT_ID = '174781855654-kqj54pb38ncgvc1c465537nrv4pcegv8.apps.googleusercontent.com';
 
@@ -32,10 +33,10 @@ function App() {
                             ]}
                         />
                         <Routes>
-                            <Route path={'/'} element={<PrivateRoute/>}>
+                            <Route path={ROOT_PATH} element={<PrivateRoute/>}>
                                 <Route index element={<TodoPage/>}/>
                             </Route>
-                            <Route path={'/login'} element={<LoginPage/>}/>
+                            <Route path={LOGIN_PATH} element={<LoginPage/>}/>
                             <Route path='*' element={<div>404 Not Found</div>}/>
                         </Routes>
                         <ToastContainer/>

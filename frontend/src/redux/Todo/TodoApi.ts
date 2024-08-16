@@ -2,6 +2,7 @@ import {createApi} from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../../client/customBaseQuery";
 import {Todo} from "../../types/Todo";
 import {getTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
+import {TODO_PATH} from "../../constants/constants";
 
 export const todoApi = createApi({
     reducerPath: 'todoApi',
@@ -10,7 +11,7 @@ export const todoApi = createApi({
     endpoints: (builder) => ({
         getTodos: builder.query<Todo[], void>({
             query: () => ({
-                url: 'todo',
+                url: TODO_PATH,
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${getTokenFromLocalStorage()}`
@@ -27,7 +28,7 @@ export const todoApi = createApi({
         }),
         createTodo: builder.mutation<Todo, Todo>({
             query: ({...body}) => ({
-                url: 'todo',
+                url: TODO_PATH,
                 method: 'POST',
                 data: body,
                 headers: {
