@@ -1,8 +1,10 @@
 import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Todo } from '../../types/Todo';
-import { useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
+import {useCreateTodoMutation, useDeleteTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
+import {FaRegTrashAlt} from "react-icons/fa";
+import {toast} from "react-toastify";
 
 type NewTodo = {
     title: string;
@@ -10,7 +12,8 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
-    const [createTodo] = useCreateTodoMutation();
+    const [createTodo, {isSuccess: wasCreationSuccess}] = useCreateTodoMutation();
+    const [deleteTodo, {isSuccess: wasDeleteSuccess}] = useDeleteTodoMutation()
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
@@ -46,7 +49,6 @@ const TodoPage = () => {
     };
 
     const handleAddTodo = () => {
-        // TODO: Show success message
         const todo: Todo = {
             id: 0,
             completed: false,
@@ -54,6 +56,18 @@ const TodoPage = () => {
         };
         createTodo(todo);
         handleClearTodo();
+    }
+
+    useEffect(() => {
+        if(wasDeleteSuccess) toast.success("Todo deleted!");
+    }, [wasDeleteSuccess]);
+
+    useEffect(() => {
+        if(wasCreationSuccess) toast.success("Successfully created");
+    }, [wasCreationSuccess]);
+
+    const handleDelete = (id: number) => {
+        deleteTodo(id);
     }
 
     const { data, isLoading } = useGetTodosQuery();
@@ -86,6 +100,9 @@ const TodoPage = () => {
                                     <Card.Title>{todo.title}</Card.Title>
                                     <Card.Text>{todo.description}</Card.Text>
                                 </Card.Body>
+                                <Card.Footer className={styles.actions}>
+                                    <FaRegTrashAlt onClick={() => handleDelete(todo.id)} className={styles.delete}/>
+                                </Card.Footer>
                             </Card>
                         )
                     })

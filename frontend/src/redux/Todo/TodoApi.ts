@@ -50,8 +50,18 @@ export const todoApi = createApi({
                     patchResult.undo();
                 }
             }
+        }),
+        deleteTodo: builder.mutation<void, number>({
+            query: (id:number) => ({
+                url: `${TODO_PATH}/${id}`,
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`
+                }
+            }),
+            invalidatesTags: [{type: 'Todo', id: 'LIST'}]
         })
-    }),
+    })
 });
 
-export const { useGetTodosQuery, useCreateTodoMutation } = todoApi;
+export const { useGetTodosQuery, useCreateTodoMutation, useDeleteTodoMutation } = todoApi;
