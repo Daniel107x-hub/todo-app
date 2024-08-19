@@ -39,7 +39,7 @@ function App() {
                             <Route path={LOGIN_PATH} element={<LoginPage/>}/>
                             <Route path='*' element={<div>404 Not Found</div>}/>
                         </Routes>
-                        <ToastContainer/>
+                        <ToastContainer position="bottom-right"/>
                     </BrowserRouter>
                 </PersistGate>
             </Provider>
