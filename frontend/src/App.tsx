@@ -18,13 +18,7 @@ function App() {
                     title: "X App",
                     url: "/"
                 }}
-                links={[
-                    {
-                        title: "Home",
-                        url: "/",
-                        isPrivate: true
-                    }
-                ]}
+                links={[]}
             />
             <Routes>
                 <Route path={ROOT_PATH} element={<PrivateRoute/>}>

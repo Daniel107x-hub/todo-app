@@ -5,6 +5,7 @@ import { Todo } from '../../types/Todo';
 import {useCreateTodoMutation, useDeleteTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
 import {FaRegTrashAlt} from "react-icons/fa";
 import {toast} from "react-toastify";
+import Loader from "../../components/Common/Loader";
 
 type NewTodo = {
     title: string;
@@ -81,7 +82,7 @@ const TodoPage = () => {
         }
     }, [response]);
 
-    if(isLoading) return <>Loading...</>
+    if(isLoading) return <Loader/>
     return (
         <div className={styles.todoPage}>
             <section className={styles.newTodo}>
