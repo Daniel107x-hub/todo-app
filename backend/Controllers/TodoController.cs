@@ -75,4 +75,18 @@ public class TodoController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<TodoDto>> UpdateTodo([FromRoute]int id, [FromBody] Todo todo)
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var foundTodo  = await _context.Todos.FindAsync(id);
+        if (foundTodo == null || foundTodo.UserEmail == null) return NotFound();
+        if (!foundTodo.UserEmail.Equals(email)) return NotFound();
+        foundTodo.Title = todo.Title;
+        foundTodo.Description = todo.Description;
+        foundTodo.Completed = todo.Completed;
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 }

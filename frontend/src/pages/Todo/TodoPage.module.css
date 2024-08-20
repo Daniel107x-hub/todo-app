@@ -45,11 +45,6 @@
     grid-auto-rows: minmax(10rem, auto);
 
     .todo {
-        :hover {
-            cursor: pointer;
-            box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
-        }
-
         .actions {
             display: flex;
             flex-direction: row;
@@ -58,6 +53,21 @@
             .delete:hover{
                 color: red;
             }
+
+            .checkbox:hover {
+                color: red;
+            }
         }
+
     }
+
+    .todo:hover{
+        cursor: pointer;
+        box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+
+    }
+}
+
+.completed {
+    background-color: rgba(245, 189, 148, 0.57);
 }

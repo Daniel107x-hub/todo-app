@@ -60,8 +60,19 @@ export const todoApi = createApi({
                 }
             }),
             invalidatesTags: [{type: 'Todo', id: 'LIST'}]
+        }),
+        updateTodo: builder.mutation<Todo, Todo>({
+            query: ({...body}) => ({
+                url: `${TODO_PATH}/${body.id}`,
+                method: 'PUT',
+                data: body,
+                headers: {
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`
+                }
+            }),
+            invalidatesTags: [{type: 'Todo', id: 'LIST'}]
         })
     })
 });
 
-export const { useGetTodosQuery, useCreateTodoMutation, useDeleteTodoMutation } = todoApi;
+export const { useGetTodosQuery, useCreateTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation } = todoApi;

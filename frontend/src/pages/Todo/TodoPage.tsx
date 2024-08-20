@@ -2,10 +2,11 @@ import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
 import {useEffect, useState} from "react";
 import { Todo } from '../../types/Todo';
-import {useCreateTodoMutation, useDeleteTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
+import {useCreateTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
 import {FaRegTrashAlt} from "react-icons/fa";
 import {toast} from "react-toastify";
 import Loader from "../../components/Common/Loader";
+import {MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank} from "react-icons/md";
 
 type NewTodo = {
     title: string;
@@ -16,6 +17,7 @@ const TodoPage = () => {
     const response = useGetTodosQuery();
     const [createTodo, {isSuccess: wasCreationSuccess}] = useCreateTodoMutation();
     const [deleteTodo, {isSuccess: wasDeleteSuccess}] = useDeleteTodoMutation()
+    const [updateTodo, {isSuccess: wasUpdateSuccess}] = useUpdateTodoMutation();
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
@@ -70,8 +72,19 @@ const TodoPage = () => {
         if(wasCreationSuccess) toast.success("Successfully created");
     }, [wasCreationSuccess]);
 
+    useEffect(() => {
+        if(wasUpdateSuccess) toast.success("Successfully updated");
+    }, [wasUpdateSuccess]);
+
     const handleDelete = (id: number) => {
         deleteTodo(id);
+    }
+
+    const handleComplete = (todo: Todo) => {
+        updateTodo({
+            ...todo,
+            completed: !todo.completed
+        })
     }
 
     useEffect(() => {
@@ -109,13 +122,19 @@ const TodoPage = () => {
                 {
                     todos.map((todo: Todo) => {
                         return (
-                            <Card key={todo.id} className={styles.todo}>
+                            <Card key={todo.id} className={`${styles.todo} ${todo.completed ? styles.completed : ''}`}>
                                 <Card.Body>
                                     <Card.Title>{todo.title}</Card.Title>
                                     <Card.Text>{todo.description}</Card.Text>
                                 </Card.Body>
                                 <Card.Footer className={styles.actions}>
                                     <FaRegTrashAlt onClick={() => handleDelete(todo.id)} className={styles.delete}/>
+                                    {
+                                        todo.completed && <MdOutlineCheckBox onClick={() => handleComplete(todo)} className={styles.checkbox}/>
+                                    }
+                                    {
+                                        !todo.completed && <MdOutlineCheckBoxOutlineBlank onClick={() => handleComplete(todo)} className={styles.checkbox}/>
+                                    }
                                 </Card.Footer>
                             </Card>
                         )
