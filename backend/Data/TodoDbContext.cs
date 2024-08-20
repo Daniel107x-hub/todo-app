@@ -17,4 +17,14 @@ public class TodoDbContext : DbContext
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasMany(e => e.Todos)
+            .WithOne(e => e.User)
+            .HasForeignKey(e => e.UserEmail)
+            .HasPrincipalKey(e => e.Email)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
