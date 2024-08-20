@@ -20,6 +20,7 @@ const TodoPage = () => {
         description: ""
     });
     const [todos, setTodos] = useState<Todo[]>([]);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewTodo((todo: NewTodo) => {
@@ -73,10 +74,14 @@ const TodoPage = () => {
     }
 
     useEffect(() => {
-        if(response.data) setTodos(response.data);
+        if(response.isLoading) setIsLoading(true);
+        if(response.data){
+            setTodos(response.data);
+            setIsLoading(false)
+        }
     }, [response]);
 
-    if(todos.length === 0) return <>Loading...</>
+    if(isLoading) return <>Loading...</>
     return (
         <div className={styles.todoPage}>
             <section className={styles.newTodo}>
@@ -97,6 +102,9 @@ const TodoPage = () => {
                </Card>
             </section>
             <section className={styles.todos}>
+                {
+                    todos.length === 0 && <div>No todos yet!</div>
+                }
                 {
                     todos.map((todo: Todo) => {
                         return (
