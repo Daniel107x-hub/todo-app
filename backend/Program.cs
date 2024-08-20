@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers()
 .AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = null;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 builder.Services.AddRouting(option => option.LowercaseUrls = true);
 builder.Services.AddDbContext<TodoDbContext>();
