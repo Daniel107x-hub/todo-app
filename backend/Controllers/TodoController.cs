@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,28 +21,49 @@ public class TodoController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Todo>>> GetTodos()
+    public async Task<ActionResult<IEnumerable<TodoDto>>> GetTodos()
     {
-        return await _context.Todos.ToListAsync();
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _context.Users.Where(user => user.Email == email).FirstAsync();
+        var todos  = await _context.Todos.Where(todo => todo.UserEmail == user.Email).ToListAsync();
+        return todos.Select(todo => new TodoDto()
+        {
+            Id = todo.Id,
+            Title = todo.Title,
+            Description = todo.Description,
+            Completed = todo.Completed
+        }).ToList();
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Todo>> GetTodo(int id)
+    public async Task<ActionResult<TodoDto>> GetTodo(int id)
     {
-        var todo = await _context.Todos.FindAsync(id);
-        if(todo == null)
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _context.Users.Where(user => user.Email == email).FirstAsync();
+        var todos = await _context.Todos.Where(todo => todo.UserEmail == user.Email && todo.Id == id).ToListAsync();
+        if(todos.Count == 0)
         {
             return NotFound();
         }
-        return todo;
+        return todos.Select(todo => new TodoDto()
+        {
+            Id = todo.Id,
+            Title = todo.Title,
+            Description = todo.Description,
+            Completed = todo.Completed
+        }).First();
     }
     
     [HttpPost]
     public async Task<ActionResult<Todo>> PostTodo(Todo todo)
     {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _context.Users.Where(user => user.Email == email).FirstOrDefaultAsync();
+        if (user == null) return Unauthorized();
+        todo.UserEmail = user.Email;
         _context.Todos.Add(todo);
         await _context.SaveChangesAsync();
-        return CreatedAtAction("GetTodo", new { id = todo.id }, todo);
+        return CreatedAtAction("GetTodo", new { id = todo.Id }, todo);
     }
 
     [HttpDelete("{id}")]

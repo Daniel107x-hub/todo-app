@@ -12,12 +12,15 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
+    const response = useGetTodosQuery();
     const [createTodo, {isSuccess: wasCreationSuccess}] = useCreateTodoMutation();
     const [deleteTodo, {isSuccess: wasDeleteSuccess}] = useDeleteTodoMutation()
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
     });
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewTodo((todo: NewTodo) => {
@@ -70,8 +73,15 @@ const TodoPage = () => {
         deleteTodo(id);
     }
 
-    const { data, isLoading } = useGetTodosQuery();
-    if(isLoading || !data) return <>Loading...</>
+    useEffect(() => {
+        if(response.isLoading) setIsLoading(true);
+        if(response.data){
+            setTodos(response.data);
+            setIsLoading(false)
+        }
+    }, [response]);
+
+    if(isLoading) return <>Loading...</>
     return (
         <div className={styles.todoPage}>
             <section className={styles.newTodo}>
@@ -93,7 +103,10 @@ const TodoPage = () => {
             </section>
             <section className={styles.todos}>
                 {
-                    data.map((todo: Todo) => {
+                    todos.length === 0 && <div>No todos yet!</div>
+                }
+                {
+                    todos.map((todo: Todo) => {
                         return (
                             <Card key={todo.id} className={styles.todo}>
                                 <Card.Body>

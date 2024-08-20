@@ -6,11 +6,12 @@ public class User
 {
     [Key]
     [MaxLength(50)]
-    public string email { get; set; }
+    public string Email { get; set; }
     [MaxLength(50)]
-    public string? firstName { get; set; }
+    public string? FirstName { get; set; }
     [MaxLength(50)]
-    public string? lastName { get; set; }
-    public string? picture { get; set; }
-    public DateOnly? dateOfBirth { get; set; }
+    public string? LastName { get; set; }
+    public string? Picture { get; set; }
+    public DateOnly? DateOfBirth { get; set; }
+    public ICollection<Todo> Todos { get; } // Child entity
 }

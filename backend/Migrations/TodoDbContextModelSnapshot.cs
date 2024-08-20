@@ -24,51 +24,71 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Todo", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("completed")
+                    b.Property<bool>("Completed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("description")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserEmail");
 
                     b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
                 {
-                    b.Property<string>("email")
+                    b.Property<string>("Email")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DateOnly?>("dateOfBirth")
+                    b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
-                    b.Property<string>("firstName")
+                    b.Property<string>("FirstName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("lastName")
+                    b.Property<string>("LastName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("picture")
+                    b.Property<string>("Picture")
                         .HasColumnType("text");
 
-                    b.HasKey("email");
+                    b.HasKey("Email");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("backend.Models.Todo", b =>
+                {
+                    b.HasOne("backend.Models.User", "User")
+                        .WithMany("Todos")
+                        .HasForeignKey("UserEmail")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend.Models.User", b =>
+                {
+                    b.Navigation("Todos");
                 });
 #pragma warning restore 612, 618
         }
