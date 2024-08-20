@@ -1,40 +1,37 @@
-import {combineReducers, configureStore, Store} from "@reduxjs/toolkit";
-import todoReducer, {TodoState} from "./Todo/TodoSlice";
+import {combineReducers, configureStore, Reducer, Store} from "@reduxjs/toolkit";
 import authReducer, {AuthState} from "./Auth/AuthSlice";
 import {todoApi} from "./Todo/TodoApi";
 import {authApi} from "./Auth/AuthApi";
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
+import storage from "redux-persist/lib/storage";
+import {persistReducer, persistStore} from "redux-persist";
 interface AppState {
-    todo: TodoState,
     auth: AuthState
 }
 
-const rootReducer = combineReducers({
-    todo: todoReducer,
+const rootReducer : Reducer = combineReducers({
     auth: authReducer,
     [todoApi.reducerPath]: todoApi.reducer,
     [authApi.reducerPath]: authApi.reducer
 });
 
 const persistConfig = {
-    key: 'root',
+    key: 'app', // root causes conflict so set this name to something else
     storage
 }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer : Reducer = persistReducer(persistConfig, rootReducer);
 
-const configureAppStore = () : Store<AppState> => {
+const configureAppStore = (reducer: Reducer = rootReducer) : Store<AppState> => {
     return configureStore({
-        reducer: persistedReducer,
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(todoApi.middleware).concat(authApi.middleware)
+        reducer: reducer,
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: {
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+            }}).concat(todoApi.middleware).concat(authApi.middleware)
     });
 };
 
-const persistedStore = () => {
-    const store = configureAppStore();
-    const persistor = persistStore(store);
-    return { store, persistor };
-}
+const store = configureAppStore(persistedReducer);
+const persistor = persistStore(store);
 
-export { configureAppStore, persistedStore };
+export { store, persistor };
