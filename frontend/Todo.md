@@ -20,7 +20,10 @@ Missing:
 
 [2021-08-19]
 [x] Associate todos with users so user will only have access to their todos
-[] Add custom loader while loading todos
+[x] Add custom loader while loading todos
+[x] Add complete todo functionality
+[] Extract todo to its own component
 [] Create controller to get current user and call it on the root page to rehydrate current user, if not authorized, return to login
 [] Add successful login toast
 [] Add token ban feature on logout
+[] Error handling on todo controller
