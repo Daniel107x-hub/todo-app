@@ -23,8 +23,8 @@ Missing:
 [x] Add custom loader while loading todos
 [x] Add complete todo functionality
 [x] Extract todo to its own component
-[] Add update todo modal
-[] Create controller to get current user and call it on the root page to rehydrate current user, if not authorized, return to login
+[x] Add update todo modal
+[] Create controller to get current user and call it on first load (useEffect) the root page to rehydrate current user, if not authorized, return to login
 [] Add successful login toast
 [] Add token ban feature on logout
 [] Error handling on todo controller

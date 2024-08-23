@@ -100,6 +100,9 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
