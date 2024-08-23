@@ -17,14 +17,14 @@ Missing:
 [x] Move all urls and paths to constants
 [x] Show user details on header  
 [x] Add feature to delete todos  
-
-[2021-08-19]
+  
+[2021-08-19]  
 [x] Associate todos with users so user will only have access to their todos
-[x] Add custom loader while loading todos
-[x] Add complete todo functionality
-[x] Extract todo to its own component
-[x] Add update todo modal
-[] Create controller to get current user and call it on first load (useEffect) the root page to rehydrate current user, if not authorized, return to login
-[] Add successful login toast
-[] Add token ban feature on logout
+[x] Add custom loader while loading todos   
+[x] Add complete todo functionality   
+[x] Extract todo to its own component   
+[x] Add update todo modal   
+[] Create controller to get current user and call it on first load (useEffect) the root page/header to rehydrate current user, if not authorized, return to login 
+[] Add successful login toast  
+[] Add token ban feature on logout  
 [] Error handling on todo controller

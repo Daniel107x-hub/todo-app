@@ -56,7 +56,7 @@ if(builder.Environment.IsDevelopment())
     builder.Services.AddCors(options => {
         options.AddPolicy(name: specificOrigins,
             policy => {
-                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                policy.WithOrigins("http://localhost:5000", "https://localhost:5000")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -98,11 +98,11 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseHttpsRedirection();
+    app.UseDefaultFiles();
+    app.UseStaticFiles();
+    app.MapFallbackToFile("index.html");
 }
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-app.MapFallbackToFile("index.html");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
