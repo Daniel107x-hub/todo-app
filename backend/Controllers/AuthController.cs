@@ -6,6 +6,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -64,7 +65,7 @@ public class AuthController : ControllerBase
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddMinutes(10),
             signingCredentials: creds);
         var response = new
         {
@@ -72,6 +73,23 @@ public class AuthController : ControllerBase
             token = new JwtSecurityTokenHandler().WriteToken(token)
         };
         return Ok(response);
+    }
+
+    [HttpGet("user")]
+    public async Task<ActionResult<User>> GetCurrentUser()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        if (email == null) return Unauthorized();
+        var user = await _context.Users.Where(user => user.Email == email).FirstOrDefaultAsync();
+        if (user == null) return Unauthorized();
+        return Ok(new UserDto()
+        {
+            Email = user.Email,
+            FirstName = user.FirstName,
+            DateOfBirth = user.DateOfBirth,
+            LastName = user.LastName,
+            Picture = user.Picture
+        });
     }
 }
 
