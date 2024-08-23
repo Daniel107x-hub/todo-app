@@ -1,0 +1,52 @@
+networks:
+  dev:
+    driver: bridge
+
+services:
+  todo_app:
+    image: todo:latest
+    depends_on:
+      - todo_db
+    container_name: todo_app
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=todo_db;Database=todo;Username=postgres;Password=postgres;Port=5432;
+    networks:
+      - dev
+
+  todo_migrations:
+    container_name: todo_migrations
+    image: todo_migrations
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations
+    depends_on:
+      - todo_db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=todo_db;Database=todo;Username=postgres;Password=postgres;Port=5432;
+    networks:
+      - dev
+
+  todo_db:
+    image: postgres:latest
+    container_name: todo_db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=todo
+    networks:
+      - dev
+    restart: always
+    volumes: 
+      - todo_db_data:/var/lib/postgresql/data
+
+volumes:
+  todo_db_data:
