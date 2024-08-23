@@ -2,9 +2,10 @@ import {Button, Card} from "react-bootstrap";
 import styles from "./TodoPage.module.css";
 import {useEffect, useState} from "react";
 import { Todo } from '../../types/Todo';
-import {useCreateTodoMutation, useDeleteTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
-import {FaRegTrashAlt} from "react-icons/fa";
+import {useCreateTodoMutation, useGetTodosQuery} from "../../redux/Todo/TodoApi";
 import {toast} from "react-toastify";
+import Loader from "../../components/Common/Loader";
+import TodoItem from "../../components/Todo/TodoItem";
 
 type NewTodo = {
     title: string;
@@ -12,12 +13,14 @@ type NewTodo = {
 }
 
 const TodoPage = () => {
+    const response = useGetTodosQuery();
     const [createTodo, {isSuccess: wasCreationSuccess}] = useCreateTodoMutation();
-    const [deleteTodo, {isSuccess: wasDeleteSuccess}] = useDeleteTodoMutation()
     const [newTodo, setNewTodo] = useState<NewTodo>({
         title: "",
         description: ""
     });
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewTodo((todo: NewTodo) => {
@@ -59,19 +62,18 @@ const TodoPage = () => {
     }
 
     useEffect(() => {
-        if(wasDeleteSuccess) toast.success("Todo deleted!");
-    }, [wasDeleteSuccess]);
-
-    useEffect(() => {
         if(wasCreationSuccess) toast.success("Successfully created");
     }, [wasCreationSuccess]);
 
-    const handleDelete = (id: number) => {
-        deleteTodo(id);
-    }
+    useEffect(() => {
+        if(response.isLoading) setIsLoading(true);
+        if(response.data){
+            setTodos(response.data);
+            setIsLoading(false)
+        }
+    }, [response]);
 
-    const { data, isLoading } = useGetTodosQuery();
-    if(isLoading || !data) return <>Loading...</>
+    if(isLoading) return <Loader/>
     return (
         <div className={styles.todoPage}>
             <section className={styles.newTodo}>
@@ -93,19 +95,10 @@ const TodoPage = () => {
             </section>
             <section className={styles.todos}>
                 {
-                    data.map((todo: Todo) => {
-                        return (
-                            <Card key={todo.id} className={styles.todo}>
-                                <Card.Body>
-                                    <Card.Title>{todo.title}</Card.Title>
-                                    <Card.Text>{todo.description}</Card.Text>
-                                </Card.Body>
-                                <Card.Footer className={styles.actions}>
-                                    <FaRegTrashAlt onClick={() => handleDelete(todo.id)} className={styles.delete}/>
-                                </Card.Footer>
-                            </Card>
-                        )
-                    })
+                    todos.length === 0 && <div>No todos yet!</div>
+                }
+                {
+                    todos.map((todo: Todo) => <TodoItem todo={todo} key={todo.id}/>)
                 }
             </section>
         </div>

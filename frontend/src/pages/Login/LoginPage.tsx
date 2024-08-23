@@ -9,6 +9,7 @@ import {User} from "../../types/Todo";
 import {Card} from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import {ROOT_PATH} from "../../constants/constants";
+import { persistor } from "../../redux/store";
 
 export type AuthResponse = {
     credential: string;
@@ -44,7 +45,7 @@ const LoginPage = () => {
     };
 
     if(user) return <Navigate to={ROOT_PATH}/>
-
+    persistor.purge();
     return (
     <div className={styles.content}>
         <Card className={styles.card}>

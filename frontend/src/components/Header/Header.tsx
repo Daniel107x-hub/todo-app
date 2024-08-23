@@ -4,6 +4,7 @@ import {removeTokenFromLocalStorage} from "../../utils/LocalStorageUtils";
 import {removeUser} from "../../redux/Auth/AuthSlice";
 import {useNavigate} from "react-router-dom";
 import UserBadge from "./UserBadge";
+import { persistor } from "../../redux/store";
 
 type HeaderLink = {
     title: string;
@@ -23,7 +24,8 @@ const Header = (props: HeaderProps) => {
     const { brand, links } = props;
     const handleLogout = () => {
         removeTokenFromLocalStorage();
-        dispatch(removeUser())
+        dispatch(removeUser());
+        persistor.purge();
         navigate("/login");
     };
     return (

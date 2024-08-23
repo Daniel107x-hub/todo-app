@@ -36,10 +36,10 @@ public class AuthController : ControllerBase
             {
                 user = new User()
                 {
-                    email = payload.Email,
-                    firstName = payload.GivenName,
-                    lastName = payload.FamilyName,
-                    picture = payload.Picture
+                    Email = payload.Email,
+                    FirstName = payload.GivenName,
+                    LastName = payload.FamilyName,
+                    Picture = payload.Picture
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

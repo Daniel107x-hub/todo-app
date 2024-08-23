@@ -43,21 +43,4 @@
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1rem;
     grid-auto-rows: minmax(10rem, auto);
-
-    .todo {
-        :hover {
-            cursor: pointer;
-            box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
-        }
-
-        .actions {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-
-            .delete:hover{
-                color: red;
-            }
-        }
-    }
 }
